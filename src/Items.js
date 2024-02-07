@@ -16,7 +16,8 @@ function Items(props) {
                 <Col lg={3} className='p-0'>
                     <Categories cate={cate}></Categories>
                 </Col>
-                <Col className='p-0'>
+                <Col className='p-0 right_side'>
+                    <div>
                     {
                         data.map((ele, ind) => {
                             return (
@@ -46,6 +47,7 @@ function Items(props) {
                             )
                         })
                     }
+                    </div>
                 </Col>
             </Row>
         </div>

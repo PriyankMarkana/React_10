@@ -2,18 +2,24 @@ import React, { useEffect, useState, } from 'react';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Col, Row } from 'react-bootstrap';
-import apple from './images/apple.jpg'
 import { TiStarFullOutline, TiStarHalfOutline } from "react-icons/ti";
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
 import Header from './Header';
+import { useSelector, useDispatch } from 'react-redux'
+import { add } from './App/Shopping';
+import Spinner from 'react-bootstrap/Spinner';
+
 function Content() {
+  let data=useDispatch();
   let handle=useParams();
 
   let[p,setp]=useState();
   
   let [con,setCon] = useState([]);
   let [img,setimg] = useState([]);
+  let [load, setload] = useState(false);
+
   const Img=(ele)=>{
     setp(ele)
   }
@@ -25,17 +31,23 @@ function Content() {
                 // console.log(response.data.products);
                 setCon(response.data);
                 setimg(response.data.images);
-                setp(response.data.thumbnail)
+                setp(response.data.thumbnail);
+                setload(true)
 
             })
             .catch(function (error) {
                 // handle error
                 console.log(error);
             })
+
   },[])
-  return (
+  return ( 
     <>
-    <Header></Header>
+
+    {
+      load?
+      <>
+      <Header></Header>
       <div className='item'>
         <Row>
           <Col className='align-items-center'>
@@ -88,12 +100,21 @@ function Content() {
                 <span className='span pe-2'>Stock:</span><span>{con.stock}</span>
               </div>
               <div className='cart'>
-                <button>Add To Cart</button>
+                <button  onClick={() =>data(add(con))} className='add'>Add To Cart</button>
               </div>
             </div>
           </Col>
         </Row> 
       </div>
+    </>
+      :
+      <div className='spinner'>
+      <Spinner animation="border" role="status">
+          <span className="visually-hidden"></span>
+      </Spinner>
+     </div>
+    }
+     
     </>
   )
 }
